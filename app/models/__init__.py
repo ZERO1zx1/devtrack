@@ -15,7 +15,7 @@ init_db = db.init_schema
 init_app = db.init_app
 
 from .base import BaseModel, now_utc, to_dict  # noqa: E402,F401
-from . import password_reset, user, task, project  # noqa: E402,F401
+from . import password_reset, project, role, task, user  # noqa: E402,F401
 
 __all__ = [
     "SCHEMA",
@@ -32,4 +32,5 @@ __all__ = [
     "task",
     "project",
     "password_reset",
+    "role",
 ]

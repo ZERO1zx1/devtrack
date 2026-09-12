@@ -1,5 +1,7 @@
 """Authentication business logic."""
 
+from flask import current_app
+
 from ..models.user import (
     create_user,
     get_user_by_email,
@@ -24,8 +26,10 @@ def register_user(username, email, password):
     if errors:
         return None, errors
 
-    user_id = create_user(username, email, hash_password(password))
-    return {"id": user_id, "username": username}, []
+    owner_email = current_app.config.get("BOOTSTRAP_OWNER_EMAIL", "").strip().lower()
+    system_role = "owner" if owner_email and email == owner_email else "member"
+    user_id = create_user(username, email, hash_password(password), system_role)
+    return {"id": user_id, "username": username, "system_role": system_role}, []
 
 
 def authenticate(username, password):

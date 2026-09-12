@@ -54,6 +54,9 @@ class BaseConfig:
 
     # Public base URL used for absolute links in emails.
     APP_URL = os.environ.get("APP_URL", "http://127.0.0.1:5001")
+    # Explicit bootstrap avoids granting owner to whichever account happens to
+    # register first on an internet-facing deployment.
+    BOOTSTRAP_OWNER_EMAIL = os.environ.get("BOOTSTRAP_OWNER_EMAIL", "")
 
     # SMTP (password reset email delivery). Leave SMTP_HOST empty to disable
     # real delivery; the mailer then logs the message to the server log.

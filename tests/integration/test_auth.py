@@ -14,6 +14,17 @@ def test_register_creates_account(client, app):
     assert row is not None
     assert row["password_hash"] != "secret123"  # never stored in plain text
     assert row["password_hash"].startswith("scrypt")
+    assert row["system_role"] == "member"
+
+
+def test_configured_owner_email_bootstraps_owner(client, app):
+    app.config["BOOTSTRAP_OWNER_EMAIL"] = "owner@example.com"
+    response = register(client, username="owner", email="OWNER@example.com")
+    assert response.status_code == 302
+
+    with app.app_context():
+        owner = db.query("SELECT * FROM users WHERE username = 'owner'", one=True)
+    assert owner["system_role"] == "owner"
 
 
 def test_register_rejects_duplicate_username(client):

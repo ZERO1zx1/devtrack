@@ -23,6 +23,8 @@ was written by hand: `HTML → CSS → JavaScript → Python → Flask → SQLit
   week plus completion-rate stats.
 - **User Accounts** — register / login / logout with scrypt-hashed passwords and
   server sessions; every user only ever sees their own data.
+- **Platform Roles** — database-backed owner, co-owner, admin, moderator and
+  member permissions with fail-closed HTML/API route guards.
 - **Theme System** — dark / light / system modes persisted in `localStorage`.
 - **Polish** — toast notifications, modals, loading spinners, empty states,
   custom 404 and 500 pages, and responsive layouts at 768px and 480px.
@@ -59,6 +61,10 @@ python app.py
 ```
 
 Open <http://127.0.0.1:5000>, register an account, and start tracking.
+
+To bootstrap the platform owner safely, set `BOOTSTRAP_OWNER_EMAIL` before that
+account registers. Registrations use the `member` role by default; developer
+seniority is separate and never grants administrative access.
 
 The SQLite database is created automatically at `instance/devtrack.db`
 (ignored by Git).

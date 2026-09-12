@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS users (
     username      TEXT NOT NULL UNIQUE,
     email         TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
+    system_role   TEXT NOT NULL DEFAULT 'member'
+                  CHECK (system_role IN ('owner', 'co_owner', 'admin', 'moderator', 'member')),
     created_at    TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at    TEXT
 );
@@ -92,6 +94,20 @@ class Database:
     def init_schema(self):
         connection = self.get()
         connection.executescript(SCHEMA)
+        # ``CREATE TABLE IF NOT EXISTS`` does not add columns to databases
+        # created by older DevTrack versions. Keep this migration idempotent so
+        # local SQLite installs upgrade automatically on application startup.
+        columns = {
+            row["name"]
+            for row in connection.execute("PRAGMA table_info(users)").fetchall()
+        }
+        if "system_role" not in columns:
+            connection.execute(
+                "ALTER TABLE users ADD COLUMN system_role TEXT NOT NULL DEFAULT 'member'"
+            )
+        connection.execute(
+            "CREATE INDEX IF NOT EXISTS idx_users_system_role ON users(system_role)"
+        )
         connection.commit()
 
     def query(self, sql, params=(), one=False):
