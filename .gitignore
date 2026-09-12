@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Environment
+.env
+.env.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Editors
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Flask / testing artifacts
+.instance/
+.pytest_cache/
+.coverage
