@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — DevTrack{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block topbar_actions %}
+    <button class="btn btn-primary btn-sm" data-open-task-modal>+ New Task</button>
+{% endblock %}
+
+{% block content %}
+    <p class="page-sub">Your coding activity at a glance. Create tasks, complete them daily, and watch your streaks grow.</p>
+
+    <div class="stats-grid">
+        <div class="card stat-card stat-accent">
+            <span class="stat-icon">&#128221;</span>
+            <span class="stat-label">Total Tasks</span>
+            <span class="stat-value" id="stat-total">{{ stats.total }}</span>
+            <span class="stat-hint">created overall</span>
+        </div>
+        <div class="card stat-card stat-green">
+            <span class="stat-icon">&#9989;</span>
+            <span class="stat-label">Completed</span>
+            <span class="stat-value" id="stat-completed">{{ stats.completed }}</span>
+            <span class="stat-hint">{{ stats.completion_pct }}% completion rate</span>
+        </div>
+        <div class="card stat-card stat-purple">
+            <span class="stat-icon">&#128736;</span>
+            <span class="stat-label">Active Projects</span>
+            <span class="stat-value" id="stat-projects">{{ stats.projects }}</span>
+            <span class="stat-hint">in progress</span>
+        </div>
+        <div class="card stat-card stat-orange">
+            <span class="stat-icon">&#128293;</span>
+            <span class="stat-label">Current Streak</span>
+            <span class="stat-value" id="stat-streak">{{ stats.current_streak }}</span>
+            <span class="stat-hint">best: {{ stats.longest_streak }} days</span>
+        </div>
+    </div>
+
+    <div class="card graph-card">
+        <div class="card-header">
+            <h2>Contribution Activity</h2>
+        </div>
+        <div class="graph-wrap">
+            <div class="graph-inner">
+                <div class="graph-head" id="graph-head"></div>
+                <div class="graph-body" id="graph-body"></div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="graph-legend">
+                Less
+                <span class="cal-cell" data-level="0"></span>
+                <span class="cal-cell" data-level="1"></span>
+                <span class="cal-cell" data-level="2"></span>
+                <span class="cal-cell" data-level="3"></span>
+                <span class="cal-cell" data-level="4"></span>
+                More
+            </div>
+        </div>
+    </div>
+
+    <div class="dash-columns">
+        <div class="card">
+            <div class="card-header">
+                <h2>Tasks</h2>
+            </div>
+            <div class="card-body">
+                <div class="task-toolbar">
+                    <input type="text" class="input" id="task-search" placeholder="Search tasks &hellip;" aria-label="Search tasks">
+                    <div class="filter-group" id="task-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="active">Active</button>
+                        <button class="filter-btn" data-filter="completed">Completed</button>
+                    </div>
+                    <select class="select" id="priority-filter" aria-label="Filter by priority">
+                        <option value="">All priorities</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                <div id="task-list" class="task-list">
+                    <div class="spinner" id="tasks-spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="card streak-card" style="margin-bottom: 22px;">
+                <span class="stat-label" style="color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 700;">A current streak</span>
+                <div class="streak-value" id="streak-value">{{ stats.current_streak }} <small style="font-size: 16px; color: var(--muted);">days</small></div>
+                <div class="streak-longest" id="streak-longest">Longest streak: {{ stats.longest_streak }} days</div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Weekly Productivity</h2>
+                </div>
+                <div class="card-body">
+                    <div class="chart-wrap">
+                        <canvas id="weekly-chart" height="220" aria-label="Weekly tasks completed chart" role="img"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hidden" id="task-modal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="task-modal-title">
+            <form id="task-form">
+                <div class="modal-header">
+                    <h2 id="task-modal-title">New Task</h2>
+                    <button type="button" class="icon-btn" data-close-task-modal>&#10005;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="task-title">Title</label>
+                        <input type="text" class="input" id="task-title" maxlength="200" placeholder="e.g. Build the task manager UI" required>
+                        <div class="form-error" id="task-title-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-description">Description</label>
+                        <textarea class="textarea" id="task-description" maxlength="1000" placeholder="What's this task about?"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="task-priority">Priority</label>
+                            <select class="select" id="task-priority">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="task-project">Project</label>
+                            <select class="select" id="task-project">
+                                <option value="">None</option>
+                                {% for p in projects %}
+                                <option value="{{ p.id }}">{{ p.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ghost" data-close-task-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="task-submit">Create Task</button>
+                </div>
+                <input type="hidden" id="task-id" value="">
+            </form>
+        </div>
+    </div>
+
+    <div class="toast hidden" id="template-toast"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/tasks.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/contributions.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}
