@@ -44,6 +44,16 @@ def check_project_belongs(project_id, user_id):
     return None
 
 
+def read_json():
+    """Read a JSON body, rejecting wrong content types and bad JSON."""
+    payload = request.get_json(silent=True)
+    if payload is None:
+        if not request.is_json:
+            return None, "Content-Type must be application/json."
+        return None, "Request body must be a valid JSON object."
+    return payload, None
+
+
 def validate_payload(payload, partial=False):
     """Validate a task payload. Returns (errors, normalized_update)."""
     errors = []
@@ -102,7 +112,7 @@ def api_list_tasks():
     user_id = session["user_id"]
     status = request.args.get("status")
     priority = request.args.get("priority")
-    q = request.args.get("q", "").strip()
+    q = request.args.get("q", "").strip()[:100]
     tasks = list_tasks(user_id, status=status, priority=priority, q=q)
     return jsonify({"tasks": tasks})
 
@@ -111,7 +121,10 @@ def api_list_tasks():
 @api_login_required
 def api_create_task():
     user_id = session["user_id"]
-    errors, fields = validate_payload(request.get_json(silent=True))
+    payload, payload_error = read_json()
+    if payload_error:
+        return jsonify({"error": payload_error}), 400
+    errors, fields = validate_payload(payload)
     fields.setdefault("priority", "medium")
 
     project_error = check_project_belongs(fields.get("project_id"), user_id)
@@ -139,7 +152,10 @@ def api_update_task(task_id):
     if task is None:
         return jsonify({"error": "Task not found."}), 404
 
-    errors, fields = validate_payload(request.get_json(silent=True), partial=True)
+    payload, payload_error = read_json()
+    if payload_error:
+        return jsonify({"error": payload_error}), 400
+    errors, fields = validate_payload(payload, partial=True)
     project_error = check_project_belongs(fields.get("project_id"), user_id)
     if project_error:
         errors.append(project_error)

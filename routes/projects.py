@@ -55,6 +55,16 @@ def validate_payload(payload, partial=False):
     return errors, fields
 
 
+def read_json():
+    """Read a JSON body, rejecting wrong content types and bad JSON."""
+    payload = request.get_json(silent=True)
+    if payload is None:
+        if not request.is_json:
+            return None, "Content-Type must be application/json."
+        return None, "Request body must be a valid JSON object."
+    return payload, None
+
+
 @bp.get("/projects")
 @login_required
 def projects_page():
@@ -71,7 +81,9 @@ def api_list_projects():
 @bp.post("/api/projects")
 @api_login_required
 def api_create_project():
-    payload = request.get_json(silent=True)
+    payload, payload_error = read_json()
+    if payload_error:
+        return jsonify({"error": payload_error}), 400
     errors, fields = validate_payload(payload)
     if errors:
         return jsonify({"error": errors[0], "errors": errors}), 400
@@ -93,7 +105,10 @@ def api_update_project(project_id):
     if get_project(project_id, user_id) is None:
         return jsonify({"error": "Project not found."}), 404
 
-    errors, fields = validate_payload(request.get_json(silent=True), partial=True)
+    payload, payload_error = read_json()
+    if payload_error:
+        return jsonify({"error": payload_error}), 400
+    errors, fields = validate_payload(payload, partial=True)
     if errors:
         return jsonify({"error": errors[0], "errors": errors}), 400
 
