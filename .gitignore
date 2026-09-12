@@ -24,5 +24,6 @@ desktop.ini
 
 # Flask / testing artifacts
 .instance/
+instance/
 .pytest_cache/
 .coverage
