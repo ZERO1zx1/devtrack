@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}404 — Not Found — DevTrack{% endblock %}
+{% block body_attrs %} class="landing"{% endblock %}
+
+{% block body %}
+    <div class="page-center">
+        <div class="big-emoji">&#129300;</div>
+        <h1>404 — Page not found</h1>
+        <p>This route does not exist. Maybe your task never got completed, either.</p>
+        <a href="{{ url_for('main.index') }}" class="btn btn-primary">Back to DevTrack</a>
+    </div>
+{% endblock %}

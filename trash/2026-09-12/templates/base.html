@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DevTrack{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="dashboard-body">
+
+    <aside class="sidebar" aria-label="Sidebar">
+        <a href="{{ url_for('index') }}" class="sidebar-brand">
+            <span class="brand-logo">&#128640;</span>
+            <span class="brand-name">DevTrack</span>
+        </a>
+
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' }}">
+                <span class="nav-icon">&#128200;</span> Dashboard
+            </a>
+            <a href="{{ url_for('projects.projects_page') }}"
+                class="{{ 'active' if request.endpoint == 'projects.projects_page' }}">
+                <span class="nav-icon">&#128736;</span> Projects
+            </a>
+        </nav>
+
+        <div class="sidebar-theme" data-theme-switcher>
+            <button class="btn btn-sm btn-ghost" data-theme="dark" title="Dark mode">&#127769;</button>
+            <button class="btn btn-sm btn-ghost" data-theme="light" title="Light mode">&#9728;&#65039;</button>
+            <button class="btn btn-sm btn-ghost" data-theme="system" title="Match system">&#128269;</button>
+        </div>
+
+        <div class="sidebar-user">
+            <span class="avatar">{{ session.get('username', '?')[0] | upper }}</span>
+            <div>
+                <strong>{{ session.get('username', 'guest') }}</strong><br>
+                <a href="{{ url_for('auth.logout') }}">Logout</a>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main-area">
+        <div class="topbar">
+            <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+            <div class="topbar-right">
+                <button class="btn btn-outline btn-sm" data-quick-theme title="Toggle theme">&#127769; /
+                    &#9728;&#65039;</button>
+                {% block topbar_actions %}{% endblock %}
+            </div>
+        </div>
+
+        <main class="page-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="footer">
+            <div class="container footer-inner">
+                <p>&copy; 2026 DevTrack</p>
+            </div>
+        </footer>
+    </div>
+
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

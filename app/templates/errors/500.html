@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}500 — Server Error — DevTrack{% endblock %}
+{% block body_attrs %} class="landing"{% endblock %}
+
+{% block body %}
+    <div class="page-center">
+        <div class="big-emoji">&#128165;</div>
+        <h1>500 — Something broke</h1>
+        <p>An unexpected error occurred on the server. The streak stays safe — go back and try again.</p>
+        <a href="{{ url_for('main.index') }}" class="btn btn-primary">Back to DevTrack</a>
+    </div>
+{% endblock %}

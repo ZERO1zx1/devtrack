@@ -27,3 +27,7 @@ desktop.ini
 instance/
 .pytest_cache/
 .coverage
+
+# Local server logs
+server.log
+server.err

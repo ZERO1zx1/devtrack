@@ -1,31 +1,26 @@
-"""Shared pytest fixtures for DevTrack."""
+"""Shared pytest fixtures for DevTrack.
+
+Each test gets a throwaway SQLite database in a temp directory. The
+``DATABASE`` env var is honoured by ``create_app`` and points the factory
+at that file before schema init runs.
+"""
 
 import os
-import sys
-import tempfile
 
 import pytest
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+os.environ.setdefault("CONFIG", "testing")
 
 from app import create_app  # noqa: E402
 
 
 @pytest.fixture()
-def app():
-    db_fd, db_path = tempfile.mkstemp(suffix=".db")
-    app = create_app(
-        {
-            "TESTING": True,
-            "DATABASE": db_path,
-            "SECRET_KEY": "test-secret-key",
-        }
-    )
+def app(tmp_path):
+    db_path = tmp_path / "devtrack-test.db"
+    os.environ["DATABASE"] = str(db_path)
+    app = create_app("testing")
     yield app
-    app.config["DATABASE"]
-    os.close(db_fd)
-    if os.path.exists(db_path):
-        os.remove(db_path)
+    os.environ.pop("DATABASE", None)
 
 
 @pytest.fixture()

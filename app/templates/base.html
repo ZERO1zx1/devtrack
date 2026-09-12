@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}DevTrack{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+</head>
+<body{% block body_attrs %}{% endblock %}>
+    {% block body %}{% endblock %}
+
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+    <script src="{{ url_for('static', filename='js/core/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/core/toast.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/core/theme.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

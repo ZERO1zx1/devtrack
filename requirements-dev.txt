@@ -1,0 +1,6 @@
+# Dev/lint/test dependencies (in addition to requirements.txt)
+pytest>=8.0
+ruff>=0.6
+black>=24.0
+pytest-cov>=5.0
+coverage>=7.0

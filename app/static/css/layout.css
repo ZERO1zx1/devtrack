@@ -1,0 +1,317 @@
+/* ============================================================
+   DevTrack — layout.css
+   Dashboard shell (sidebar + main area), graph/contribution
+   grid, and responsive breakpoints.
+   ============================================================ */
+
+/* ----- Dashboard shell ----- */
+.dashboard-body {
+    display: flex;
+    min-height: 100vh;
+    background: var(--bg);
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 14px;
+    z-index: 40;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+    padding: 0 8px 20px;
+}
+
+.sidebar-brand:hover {
+    color: var(--text);
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
+    transition: background var(--transition), color var(--transition);
+}
+
+.sidebar-nav a:hover {
+    background: var(--surface-2);
+    color: var(--text);
+}
+
+.sidebar-nav a.active {
+    background: var(--surface-2);
+    color: var(--accent);
+}
+
+.sidebar-theme {
+    display: flex;
+    gap: 4px;
+    padding: 10px 8px;
+    border-top: 1px solid var(--border);
+}
+
+.sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 8px 0;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+}
+
+.sidebar-user a {
+    font-size: 12px;
+}
+
+.main-area {
+    margin-left: 220px;
+    flex: 1;
+    min-width: 0;
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 24px;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+}
+
+.topbar h1 {
+    font-size: 22px;
+}
+
+.topbar-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.page-content {
+    padding: 28px;
+}
+
+.dash-columns {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 24px;
+}
+
+/* ----- Contribution graph ----- */
+.graph-card {
+    margin-bottom: 28px;
+}
+
+.graph-wrap {
+    overflow-x: auto;
+    padding: 18px 20px;
+}
+
+.graph-inner {
+    display: inline-flex;
+    gap: 0;
+}
+
+.graph-head {
+    display: flex;
+    gap: 0;
+}
+
+.graph-head > div {
+    width: 11px;
+    height: 18px;
+    font-size: 10px;
+    color: var(--muted);
+    text-align: left;
+    line-height: 18px;
+    margin-bottom: 6px;
+}
+
+.graph-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.graph-body .day-label {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.graph-body .day-label > span {
+    width: 11px;
+    height: 11px;
+    margin: 0 3px;
+    border-radius: 2px;
+}
+
+.graph-body .day-label > div {
+    width: 32px;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+    padding-right: 8px;
+    line-height: 11px;
+}
+
+.day-label:has(span:nth-child(n+5)) .day-label span:nth-child(n+5) {
+    display: none;
+}
+
+.day-label span:not([data-level]) {
+    background: transparent !important;
+}
+
+.month-label {
+    display: flex;
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+
+.month-label span {
+    display: inline-block;
+    text-align: left;
+}
+
+/* ----- Calendar cell levels ----- */
+[data-level="0"] { background: var(--cal-0); }
+[data-level="1"] { background: var(--cal-1); }
+[data-level="2"] { background: var(--cal-2); }
+[data-level="3"] { background: var(--cal-3); }
+[data-level="4"] { background: var(--cal-4); }
+
+/* ----- Media queries ----- */
+@media (max-width: 1024px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .dash-columns {
+        grid-template-columns: 1fr;
+    }
+    .graph-card {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 62px;
+        flex-direction: row;
+        border-right: none;
+        border-top: 1px solid var(--border);
+        padding: 10px 14px;
+        gap: 4px;
+        z-index: 50;
+        justify-content: space-around;
+    }
+
+    .sidebar-brand,
+    .sidebar-theme,
+    .sidebar-user {
+        display: none;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .sidebar-nav a {
+        flex-direction: column;
+        font-size: 10px;
+        padding: 6px 12px;
+    }
+
+    .main-area {
+        margin-left: 0;
+        padding-bottom: 80px;
+    }
+
+    .features-grid,
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+        letter-spacing: -0.5px;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+    }
+
+    .task-toolbar {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stat-card .stat-value {
+        font-size: 28px;
+    }
+
+    .stat-icon {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .task-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-group {
+        flex-wrap: wrap;
+    }
+}

@@ -1,0 +1,147 @@
+/* ============================================================
+   DevTrack — base.css
+   Reset, theme variables (dark / light / system) and base
+   typography. No component or layout rules live here.
+   ============================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+:root {
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    --transition: 0.2s ease;
+    --font: "Segoe UI", Arial, system-ui, sans-serif;
+    --mono: "Cascadia Code", Consolas, "Courier New", monospace;
+}
+
+/* ----- Dark (default) theme ----- */
+[data-theme="dark"] {
+    --bg: #0d1117;
+    --bg-alt: #010409;
+    --surface: #161b22;
+    --surface-2: #1c2129;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-hover: #79c0ff;
+    --green: #3fb950;
+    --green-soft: #238636;
+    --red: #f85149;
+    --yellow: #d29922;
+    --orange: #db6d28;
+    --purple: #bc8cff;
+    --cal-0: #161b22;
+    --cal-1: #0e4429;
+    --cal-2: #006d32;
+    --cal-3: #26a641;
+    --cal-4: #39d353;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* ----- Light theme ----- */
+[data-theme="light"] {
+    --bg: #ffffff;
+    --bg-alt: #f6f8fa;
+    --surface: #f6f8fa;
+    --surface-2: #ffffff;
+    --border: #d0d7de;
+    --text: #1f2328;
+    --muted: #656d76;
+    --accent: #0969da;
+    --accent-hover: #0550ae;
+    --green: #1a7f37;
+    --green-soft: #2da44e;
+    --red: #cf222e;
+    --yellow: #9a6700;
+    --orange: #bc4c00;
+    --purple: #8250df;
+    --cal-0: #ebedf0;
+    --cal-1: #9be9a8;
+    --cal-2: #40c463;
+    --cal-3: #30a14e;
+    --cal-4: #216e39;
+    --shadow: 0 8px 24px rgba(140, 149, 159, 0.2);
+}
+
+/* System theme is resolved at runtime by js/core/theme.js. */
+
+/* ----- Base elements ----- */
+body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background var(--transition), color var(--transition);
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+h1, h2, h3, h4 {
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+pre, code {
+    font-family: var(--mono);
+}
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 18px;
+}
+
+/* ----- Sections ----- */
+.section {
+    padding: 70px 0;
+}
+
+.section-alt {
+    background: var(--bg-alt);
+    border-block: 1px solid var(--border);
+}
+
+.section-title {
+    font-size: clamp(24px, 4vw, 34px);
+    text-align: center;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+}
+
+.section-sub {
+    text-align: center;
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto 44px;
+}
+
+.page-sub {
+    color: var(--muted);
+    margin-bottom: 22px;
+}
+
+/* ----- Utilities ----- */
+.hidden {
+    display: none !important;
+}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Forgot Password — DevTrack{% endblock %}
+{% block body_attrs %} class="landing"{% endblock %}
+
+{% block body %}
+
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <a href="{{ url_for('main.index') }}" class="brand">
+                <span class="brand-logo">&#128640;</span>
+                <span class="brand-name">DevTrack</span>
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-ghost btn-sm">Back to login</a>
+        </div>
+    </header>
+
+    <div class="auth-wrap">
+        <div class="card auth-card">
+            <h1>Reset your password</h1>
+            <p class="page-sub">Enter the email you registered with and we'll send you a reset link.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="toast {{ category }}" style="margin-bottom: 14px;">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+
+            <form method="post" action="{{ url_for('auth.forgot_password') }}">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="input" id="email" name="email" maxlength="120" required autocomplete="email">
+                </div>
+                <button type="submit" class="btn btn-primary">Send Reset Link</button>
+            </form>
+
+            <p class="auth-alt">Remembered it? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+        </div>
+    </div>
+
+{% endblock %}
