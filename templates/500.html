@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 — Server Error — DevTrack</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="landing">
+
+    <div class="page-center">
+        <div class="big-emoji">&#128165;</div>
+        <h1>500 — Something broke</h1>
+        <p>An unexpected error occurred on the server. The streak stays safe — go back and try again.</p>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Back to DevTrack</a>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

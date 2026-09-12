@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register — DevTrack</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="landing">
+
+    <header class="navbar">
+        <div class="container navbar-inner">
+            <a href="{{ url_for('index') }}" class="brand">
+                <span class="brand-logo">&#128640;</span>
+                <span class="brand-name">DevTrack</span>
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-ghost btn-sm">Already have an account</a>
+        </div>
+    </header>
+
+    <div class="auth-wrap">
+        <div class="card auth-card">
+            <h1>Start tracking</h1>
+            <p class="page-sub">Create your account and make every day count.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="toast {{ category }}" style="margin-bottom: 14px;">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+
+            <form method="post" action="{{ url_for('auth.register') }}">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="input" id="username" name="username" minlength="3" maxlength="50" pattern="[A-Za-z0-9_]+" title="Letters, numbers and underscores only" placeholder="3-50 characters" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="input" id="email" name="email" maxlength="120" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="input" id="password" name="password" minlength="6" maxlength="128" placeholder="At least 6 characters" required autocomplete="new-password">
+                </div>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+            </form>
+
+            <p class="auth-alt">Already registered? <a href="{{ url_for('auth.login') }}">Login</a></p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
